@@ -114,8 +114,8 @@ class SportsWalking(Training):
         height_in_meters = self.height / self.HEIGHT_IN_METERS
         duration_in_minutes = self.duration * self.HOUR_TO_MINUTES
         mean_speed_ms = self.get_mean_speed() * self.CONVERT_IN_METR_SECONDS
-        total_calories = ((self.KOEFF_1 * self.weight +
-                          (mean_speed_ms ** 2 / height_in_meters)
+        total_calories = ((self.KOEFF_1 * self.weight
+                          + (mean_speed_ms ** 2 / height_in_meters)
                            * self.KOEFF_2 * self.weight) * duration_in_minutes)
         return total_calories
 
