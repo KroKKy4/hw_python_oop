@@ -1,4 +1,5 @@
-from typing import Dict, Type
+from typing import Type
+
 
 class InfoMessage:
     """Информационное сообщение о тренировке."""
@@ -21,7 +22,7 @@ class InfoMessage:
                 f'Дистанция: {self.distance:.3f} км; '
                 f'Ср. скорость: {self.speed:.3f} км/ч; '
                 f'Потрачено ккал: {self.calories:.3f}.'
-        )
+                )
 
 
 class Training:
@@ -57,7 +58,7 @@ class Training:
         return InfoMessage(self.__class__.__name__, self.duration,
                            self.get_distance(), self.get_mean_speed(),
                            self.get_spent_calories()
-        )
+                           )
 
 
 class Running(Training):
@@ -79,7 +80,7 @@ class Running(Training):
                 + self.CALORIES_MEAN_SPEED_SHIFT)
                 * self.weight / self.M_IN_KM
                 * (self.duration * self.HOUR_TO_MINUTES)
-        )
+                )
 
 
 class SportsWalking(Training):
@@ -100,13 +101,14 @@ class SportsWalking(Training):
         self.height = height
 
     def get_spent_calories(self) -> float:
-        height_in_meters = self.height / self.HEIGHT_IN_METERS
-        duration_in_minutes = self.duration * self.HOUR_TO_MINUTES
-        mean_speed_ms = self.get_mean_speed() * self.CONVERT_IN_METR_SECONDS
+        height_in_meters: float = self.height / self.HEIGHT_IN_METERS
+        duration_in_minutes: int = self.duration * self.HOUR_TO_MINUTES
+        mean_speed_ms: float = (self.get_mean_speed()
+                                * self.CONVERT_IN_METR_SECONDS)
         return ((self.KOEFF_1 * self.weight
                 + (mean_speed_ms ** 2 / height_in_meters)
                 * self.KOEFF_2 * self.weight) * duration_in_minutes
-        )
+                )
 
 
 class Swimming(Training):
@@ -130,12 +132,12 @@ class Swimming(Training):
     def get_mean_speed(self) -> float:
         return (self.length_pool * self.count_pool / self.M_IN_KM
                 / self.duration
-        )
+                )
 
     def get_spent_calories(self) -> float:
         return ((self.get_mean_speed() + self.KOEFF_1) * self.KOEFF_2
                 * self.weight * self.duration
-        )
+                )
 
 
 def read_package(workout_type: str, data: list[int]) -> Training:
@@ -145,6 +147,8 @@ def read_package(workout_type: str, data: list[int]) -> Training:
         'RUN': Running,
         'WLK': SportsWalking
     }
+    if workout_type not in training_type:
+        raise ValueError("Invalid workout type")
     exercises: Training = training_type[workout_type](*data)
     return exercises
 
